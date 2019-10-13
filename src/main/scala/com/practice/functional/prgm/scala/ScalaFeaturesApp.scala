@@ -3,8 +3,8 @@ package com.practice.functional.prgm.scala
 import java.io.PrintWriter
 import java.io.File
 
-object FoldTestApp extends App {
-  
+object ScalaFeaturesApp extends App {
+
   // Currying
   // Currying - Example 1:
   def addNo(x: Int)(y: Int)(z: Int) = x + y + z

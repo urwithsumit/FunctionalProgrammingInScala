@@ -1,4 +1,4 @@
-package com.practice.sk
+package com.practice.leetcode
 
 object Add2Number {
 

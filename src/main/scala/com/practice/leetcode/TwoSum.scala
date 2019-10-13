@@ -1,7 +1,8 @@
-package com.practice.sk
+package com.practice.leetcode
 
 object TwoSum {
 
+  // Brute Force approach, failed with Timeout for large input.
   def twoSum_BruteForce(nums: Array[Int], target: Int): Array[Int] = {
 
     val Result = for {
@@ -25,6 +26,7 @@ object TwoSum {
     println(twoSum_Optimal(nums, 6).mkString(","))
   }
 
+  // Optimal Approach: Passed all Test Cases.
   def twoSum_Optimal(nums: Array[Int], target: Int): Array[Int] = {
 
     val Zipped: Map[Int, Int] = nums.zipWithIndex.toMap
