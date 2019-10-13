@@ -1,5 +1,12 @@
 package com.practice.leetcode
 
+/**
+  * https://leetcode.com/problems/longest-substring-without-repeating-characters/
+  *
+  * Status: Pending.
+  *
+  */
+
 object LongestNonRepeatSubstring {
 
   def lengthOfLongestSubstring(s: String): Int = {
@@ -55,7 +62,6 @@ object LongestNonRepeatSubstring {
 
     assert(lengthOfLongestSubstring("wwc") == 2)
     assert(lengthOfLongestSubstring("dvdf") == 3)
-
 
   }
 

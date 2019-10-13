@@ -1,5 +1,14 @@
 package com.practice.leetcode
 
+
+/**
+  *
+  * https://leetcode.com/problems/two-sum/
+  *
+  * Submission Status: Success.
+  *
+  */
+
 object TwoSum {
 
   // Brute Force approach, failed with Timeout for large input.
