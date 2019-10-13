@@ -1,10 +1,30 @@
-package com.practice.sk
+package com.practice.functional.prgm.scala
 
+import java.io.PrintWriter
 import java.io.File
 
-import scala.annotation.tailrec
-
 object FoldTestApp extends App {
+  
+  // Currying
+  // Currying - Example 1:
+  def addNo(x: Int)(y: Int)(z: Int) = x + y + z
+  val onePlus = addNo(1) _
+  println(onePlus(2)(3))
+//
+  // Currying - Example 2:
+  def withPrintWriter(file: java.io.File)(op: PrintWriter => Unit) = {
+    val Writer = new PrintWriter(file)
+    try {
+      op.apply(Writer)
+    } finally {
+      Writer.close()
+    }
+  }
+
+  withPrintWriter(new java.io.File("date.txt")) { (x: PrintWriter) =>
+    x.println(s"Date: ${new java.util.Date}")
+  }
+
 
   // FoldLeft/Right
   val Money = List(1,1,1,1,1,1,1,1,1,1,1)
@@ -12,13 +32,23 @@ object FoldTestApp extends App {
   val Total = Money.foldLeft(10)((acc, n) => acc + n )
   println(Total)
 
-  val Names = Map("Sumit" -> "Kumar", "Divit" -> "Kumar", "Shikha" -> "Agarwal")
+  val Names = Map("S" -> "K", "D" -> "K", "S" -> "A")
 
   val NameFoldLeftList = Names.foldLeft(List[String]())((acc, names) => s"""${names._1} ${names._2}""" :: acc)
   println(NameFoldLeftList)
 
   val NameFoldRightList = Names.foldRight(List[String]())((names, acc) => s""" ${names._1} ${names._2}""" :: acc)
   println(NameFoldRightList)
+
+  println((2 to 10).foldLeft(1)(_ * _))
+  println((2 to 10).reduceLeft(_ * _))
+
+  println((2 to 10).foldRight(1)(_ * _))
+  println((2 to 10).reduceRight(_ * _))
+
+  val Family = Seq("A", "B", "C")
+  val result = Family.zipWithIndex.map(c => (c._1,  c._2 + 1)).map(c => c.swap).mkString("\n")
+  println(result)
 
 
   // Convert Methods to Partial Functions
@@ -37,34 +67,19 @@ object FoldTestApp extends App {
   SomeNumber.foreach(x => println(x))
   SomeNumber.foreach(println _)
 
-  // Notation for Array[String]
+  // Alternate Notation for Array[String]
   def arr(x: String*) = {
     x.foreach(println)
   }
 
-  val Input = Array("Sumit", "kumar")
+  val Input = Array("S", "K")
 
   arr(Input: _*)  // This Tell Compiler to pass each element of Array as its own argument.
 
 
-  // Factorial
-  @tailrec
-  def factorial(x: Int, acc: BigInt): BigInt = {
-
-    x match {
-      case 0 => acc
-      case 1 => acc
-      case _ => factorial(x - 1, acc * x)
-    }
-
-  }
-
-  println (factorial(10, 1))
-
-
-  // Chapter 9 - Odersky.
+  // Chapter 9 - Odersky: Convert Method to Partial functions.
   def searchByFileCriteria(query: String, matcher: (String, String) => Boolean ) = {
-    def getFiles = (new File("/Sumit/LeetCodes/src/main/scala/com/practice/sk").listFiles())
+    def getFiles = (new File("/Sumit/LeetCodes/src/main/scala/com/practice/leetcode").listFiles())
     for(file <- getFiles; if matcher(file.getName, query)) yield file.getName
   }
 
@@ -73,13 +88,11 @@ object FoldTestApp extends App {
 
 
   def searchByFileCriteria(matcher: String => Boolean ) = {
-    def getFiles = (new File("/Sumit/LeetCodes/src/main/scala/com/practice/sk").listFiles())
+    def getFiles = (new File("/Sumit/LeetCodes/src/main/scala/com/practice/leetcode").listFiles())
     for(file <- getFiles; if matcher(file.getName)) yield file.getName
   }
 
   println(searchByFileCriteria((fileName: String) => fileName.endsWith("scala")).mkString(","))
   println(searchByFileCriteria(_.endsWith("scala")).mkString(","))
 
-
-  
 }
