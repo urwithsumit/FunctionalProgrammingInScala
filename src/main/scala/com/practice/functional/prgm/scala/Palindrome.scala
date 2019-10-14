@@ -20,6 +20,15 @@ object Palindrome extends App {
     Clean
   }
 
+  def isPalindrome(s: String): Boolean = {
+    val cleanStr = s.replaceAll("[^0-9a-zA-Z]", "").toLowerCase
+    for ( i <- 0 until cleanStr.length/2) {
+      if (cleanStr.charAt(i) != cleanStr.charAt(cleanStr.length - i - 1))
+        return false
+    }
+    return true
+  }
+
   def isPalindrome[T](list: List[T]): Boolean = {
     import util.control.Breaks._
 
@@ -29,7 +38,7 @@ object Palindrome extends App {
     var j = length - 1
     var result = false
     breakable {
-      while (i <= limit && j >= limit) {
+      while (i < j) {
         if (list(i) == list(j)) {
           i += 1
           j -= 1
