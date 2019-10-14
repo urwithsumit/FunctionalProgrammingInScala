@@ -2,11 +2,12 @@ package com.practice.leetcode
 
 /**
   * https://leetcode.com/problems/add-two-numbers/
+  *
   * Status: Success
   *
   */
 
-object Add2Number {
+object AddTwoNumbers {
 
   def main(args: Array[String]) = {
     val l1 = makeLL(Seq(9))
