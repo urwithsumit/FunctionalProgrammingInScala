@@ -14,7 +14,7 @@ package com.practice.functional.prgm.scala
 object ConsecutiveDuplicates extends App {
 
   def compress[T](list: List[T]): List[T] = {
-    require(list.nonEmpty, "List is empty")
+
 
     def doCompression(list: List[T], acc: List[T]): List[T] = {
       list match {
@@ -24,9 +24,22 @@ object ConsecutiveDuplicates extends App {
       }
     }
 
-    doCompression(list.tail, List(list.head)).reverse
+    if (list.isEmpty)
+      List[T]()
+    else
+      doCompression(list.tail, List(list.head)).reverse
+
+  }
+
+  def CompressByFold[T](list: List[T]): List[T] = {
+    if (list.isEmpty)
+      List[T]()
+    else {
+      list.tail.foldLeft(List[T](list.head))((r, c) => if (r.head != c) c :: r else r).reverse
+    }
   }
 
   println(compress(List("a", "a", "a", "a", "b", "c", "c", "c", "a", "a", "a", "d", "e", "e", "e")))
   println(compress(List()))
+  println(CompressByFold(List("a", "a", "a", "a", "b", "c", "c", "c", "a", "a", "a", "d", "e", "e", "e")))
 }
