@@ -23,14 +23,14 @@ object Palindrome extends App {
   def isPalindrome[T](list: List[T]): Boolean = {
     import util.control.Breaks._
 
-    var i = 0
-    var j = list.length - 1
+    var startPtr = 0
+    var endPtr = list.length - 1
     var result = false
     breakable {
-      while (i < j) {
-        if (list(i) == list(j)) {
-          i += 1
-          j -= 1
+      while (startPtr < endPtr) {
+        if (list(startPtr) == list(endPtr)) {
+          startPtr += 1
+          endPtr -= 1
         } else {
           break
         }
