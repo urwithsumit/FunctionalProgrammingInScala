@@ -2,6 +2,9 @@ package com.practice.functional.prgm.scala
 
 import scala.annotation.tailrec
 
+/**
+  * Pascal Triangle example using Tail Recursion.
+  */
 object PascalTriangle extends App {
 
   @tailrec
