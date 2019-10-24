@@ -5,7 +5,7 @@ package com.practice.functional.prgm.scala
   *
   * I see this example as an approach to create function chaining in a modular way.
   * If we have a set of rules, this approach can be used to create rule chains, and as per requirement,
-  * these rule chains can be applied to a list of data.
+  * these rule chains can be applied to a ls of data.
   *
   * This is very close to Chain of Responsibility Pattern.
   *

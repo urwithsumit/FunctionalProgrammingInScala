@@ -1,7 +1,7 @@
 package com.practice.functional.prgm.scala
 
 /**
-  * P17 (*) Split a list into two parts.
+  * P17 (*) Split a ls into two parts.
   * The length of the first part is given. Use a Tuple for your result.
   * Example:
   *

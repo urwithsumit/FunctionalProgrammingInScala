@@ -1,8 +1,8 @@
 package com.practice.functional.prgm.scala
 
 /**
-  * Find the Kth element of a list.
-  * By convention, the first element in the list is element 0.
+  * Find the Kth element of a ls.
+  * By convention, the first element in the ls is element 0.
   * Example:
   *
   * scala> nth(2, List(1, 1, 2, 3, 5, 8))

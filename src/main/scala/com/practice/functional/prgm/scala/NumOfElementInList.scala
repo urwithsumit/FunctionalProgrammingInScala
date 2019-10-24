@@ -1,7 +1,7 @@
 package com.practice.functional.prgm.scala
 
 /**
- * Find the number of elements of a list.
+ * Find the number of elements of a ls.
  * Example:
  * scala> length(List(1, 1, 2, 3, 5, 8))
  * res0: Int = 6

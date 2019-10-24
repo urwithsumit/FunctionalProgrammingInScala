@@ -2,7 +2,7 @@ package com.practice.functional.prgm.scala
 
 /**
   *
-  * Find the last but one element of a list.
+  * Find the last but one element of a ls.
   *
   * Example:
   * scala> penultimate(List(1, 1, 2, 3, 5, 8))

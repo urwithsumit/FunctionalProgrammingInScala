@@ -1,8 +1,8 @@
 package com.practice.functional.prgm.scala
 
 /**
- * P9: Pack consecutive duplicates of list elements into sublists.
- * If a list contains repeated elements they should be placed in separate sublists.
+ * P9: Pack consecutive duplicates of ls elements into sublists.
+ * If a ls contains repeated elements they should be placed in separate sublists.
  * Example:
  *
  * scala> pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
@@ -10,7 +10,7 @@ package com.practice.functional.prgm.scala
  */
 
 /**
- * P10 (*) Run-length encoding of a list.
+ * P10 (*) Run-length encoding of a ls.
  * Use the result of problem P09 to implement the so-called run-length encoding data compression method. Consecutive duplicates of elements are encoded as tuples (N, E) where N is the number of duplicates of the element E.
  * Example:
  *
@@ -32,7 +32,7 @@ object GroupDuplicates extends App {
   }
 
   /**
-   * In case of fold right, seed is left blank. This will add an empty list.
+   * In case of fold right, seed is left blank. This will add an empty ls.
    *
    * @param list
    * @tparam T

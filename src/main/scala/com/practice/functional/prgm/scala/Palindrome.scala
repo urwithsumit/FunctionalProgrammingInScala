@@ -2,7 +2,7 @@ package com.practice.functional.prgm.scala
 
 /**
  *
- * Find out whether a list is a palindrome.
+ * Find out whether a ls is a palindrome.
  * Example:
  * scala> isPalindrome(List(1, 2, 3, 2, 1))
  * res0: Boolean = true

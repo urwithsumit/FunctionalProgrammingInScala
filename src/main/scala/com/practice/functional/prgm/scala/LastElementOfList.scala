@@ -1,7 +1,7 @@
 package com.practice.functional.prgm.scala
 
 /**
-  * Find the last element of a list.
+  * Find the last element of a ls.
   * Example:
   * scala> last(List(1, 1, 2, 3, 5, 8))
   * res0: Int = 8
