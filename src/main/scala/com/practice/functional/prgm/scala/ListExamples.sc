@@ -77,4 +77,76 @@ List(0, 1, 2, "Sumit") collectFirst {
 //combinations. Returns iterator. creates combination of given length.
 "Sumit".toSeq.combinations(4).foreach(println)
 
-//
+//Compose
+val divideby2 = (x: Int) => {
+  print(s"Input for Divideby2: $x. ");
+  x / 2
+}
+val Multby3 = (x: Int) => {
+  print(s"Input for Multby3: $x. ");
+  x * 3
+}
+
+// Composes another partial function k(i.e. Multby3) with this (i.e. divideby2) partial
+// function so that this partial function gets applied to results of k.
+// f(g(x)) where g(x) is k and f(k) is this
+val DivideBy2AndMultBy3 = divideby2 compose Multby3 // Here Mult3 result is the input for divide
+val _DivideBy2AndMultBy3 = divideby2 andThen Multby3 // Here divideby2 is executed first and its result is input for multby3
+
+DivideBy2AndMultBy3(8)
+_DivideBy2AndMultBy3(10)
+
+val ConcatEx = "Sumit".toList concat "Kumar".toList
+
+ConcatEx.contains('s')
+ConcatEx.contains('K')
+
+ConcatEx.containsSlice("uma".toList)
+
+val arr: Array[Char] = Array.ofDim(10)
+ConcatEx.copyToArray(arr)
+println(arr.mkString(","))
+
+ConcatEx.copyToArray(arr, 3)
+println(arr.mkString(","))
+
+val ls2 = List(2, 4, 6)
+
+// Correspond: Tests whether every element of this collection's iterator
+// relates to the corresponding element of another collection
+// by satisfying a test predicate.
+val CorrespondEx = ls2.corresponds(ls)(_ == _ * 2)
+
+val DiffEx = ls2.diff(ls)
+
+//Not clear with Distinct by
+val DistinctBy = List(1, 3, 5, 2, 6) distinctBy (_ % 2 == 0)
+
+// Head of collection match the condition, it is dropped.
+// next element is 5 and does not match condition. Dropwhile stops
+// when condition do not meet.
+val DropWhile = List(3, 5, 6) dropWhile (_ % 3 == 0)
+
+
+val firstChar: String => Option[Char] = _.headOption
+
+List(1, 3, 5, 2, 6) endsWith (Seq(5, 2, 6))
+
+List(1, 2, 3, 4).exists(_ > 3)
+
+List(1, 2, 3, 4, 5) filter (_ > 3)
+
+List(1, 2, 3, 4, 5) filterNot (_ > 3)
+
+List(1, 2, 3, 4, 5) find (_ > 3)
+
+List(1, 2, 3, 4, 5) findLast (_ > 3)
+
+List(1, 2, 3, 4, 5) forall (_ > 3)
+
+List(1, 2, 3, 4, 5) forall (_ > 0)
+
+List(1, 2, 3, 4, 5) foreach print
+
+List(1, 2, 3, 4, 5, 6) groupBy (_ % 2 == 0)
+
