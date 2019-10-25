@@ -150,3 +150,62 @@ List(1, 2, 3, 4, 5) foreach print
 
 List(1, 2, 3, 4, 5, 6) groupBy (_ % 2 == 0)
 
+List(List(12, 3), List("a", "b", "c"), Map(1 -> 2, 3 -> 4)).flatten
+
+//GroupMap
+
+//GroupMapReduce
+
+ls.hashCode()
+
+ls.head
+
+ls.headOption
+
+List(2, 3, 5, 3, 4, 6, 7, 9).indexOf(3)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).indexOf(3, 2)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).indexOfSlice(Seq(4, 6))
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).indexOfSlice(Seq(4, 6), 2) // index after 2
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).indexWhere(_ - 3 == 4)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).indexWhere(_ - 3 == 4, 7)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).indices
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).init
+
+//Not clear with inits
+List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9)).inits.foreach(print)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).intersect(List(3, 4, 5, 2, 33, 4, 1, 22, 3, 55, 66, 0))
+
+ls.isDefinedAt(10)
+
+ls.isTraversableAgain
+
+ls.iterator
+
+ls.lastIndexOf(3)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lastIndexOfSlice(List(7, 9))
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).lastIndexOfSlice(Seq(4, 6))
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).lastIndexOfSlice(Seq(4, 6), 2) // find before index 2
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3).lastIndexWhere(_ - 3 == 4)
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lastIndexWhere(_ - 3 == 4, 7)
+
+ls.last
+
+ls.lastOption
+
+val LzyZip = List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lazyZip(List("a","b","c","d","e","f","g","h","i","j","k","l"))
+LzyZip.mkString(",")
+
+List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lengthCompare(List("a","b","c","d","e","f","g","h","i","j"))
