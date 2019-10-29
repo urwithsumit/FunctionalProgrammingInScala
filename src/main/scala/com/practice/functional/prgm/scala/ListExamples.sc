@@ -209,3 +209,4 @@ val LzyZip = List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lazyZip(List("a","b","c","d","e"
 LzyZip.mkString(",")
 
 List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lengthCompare(List("a","b","c","d","e","f","g","h","i","j"))
+
