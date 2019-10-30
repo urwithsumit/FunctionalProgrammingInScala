@@ -165,7 +165,11 @@ shuffle(List("a", "b", "c", "d", "e", "f", "g", "h", "I", "j"))
   */
 
 def lsort[T](ls: List[List[T]]) = ls.map(x => (x, x.size)).sortBy(_._2).map(_._1)
-lsort(List(List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h), List('d, 'e), List('i, 'j, 'k, 'l), List('m, 'n), List('o)))
+def lsort2[T](ls: List[List[T]]) = ls sortWith { _.length < _.length }
+
+lsort(List(List("a", "b", "c"), List("d", "e"), List("f", "g", "h"), List("d", "e"), List("i", "j", "k", "l"), List("m", "n"), List("o")))
+lsort2(List(List("a", "b", "c"), List("d", "e"), List("f", "g", "h"), List("d", "e"), List("i", "j", "k", "l"), List("m", "n"), List("o")))
+
 
 def lsortFreq[T](ls: List[List[T]]) = ls.map(x => (x, x.size)).groupBy(_._2).values.map(c => (c, c.size)).toList.sortBy(_._2).flatMap(y => y._1.map(_._1))
-lsortFreq(List(List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h), List('d, 'e), List('i, 'j, 'k, 'l), List('m, 'n), List('o)))
+lsortFreq(List(List("a", "b", "c"), List("d", "e"), List("f", "g", "h"), List("d", "e"), List("i", "j", "k", "l"), List("m", "n"), List("o")))
