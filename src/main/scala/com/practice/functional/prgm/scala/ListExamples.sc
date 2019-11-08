@@ -210,3 +210,9 @@ LzyZip.mkString(",")
 
 List(2, 3, 5, 3, 4, 6, 7, 9, 3, 7).lengthCompare(List("a","b","c","d","e","f","g","h","i","j"))
 
+import scala.util.chaining._
+
+val times6 = (_: Int) * 6
+val i = (1 - 2 - 3).pipe(times6).pipe(scala.math.abs)
+
+val xs = List(1, 2, 3).tap(ys => println("debug " + ys.toString))
