@@ -42,6 +42,22 @@ class S99Int(m: Int) {
   def isCoprime(n: Int): Boolean = gcd(m, n) == 1
 
   /**
+    * P36 (**) Determine the prime factors of a given positive integer (2).
+    * Construct a list containing the prime factors and their multiplicity.
+    * scala> 315.primeFactorMultiplicity
+    * res0: List[(Int, Int)] = List((3,2), (5,1), (7,1))
+    * Alternately, use a Map for the result.
+    *
+    * scala> 315.primeFactorMultiplicity
+    * res0: Map[Int,Int] = Map(3 -> 2, 5 -> 1, 7 -> 1)
+    */
+
+  def primeFactorMultiplicity() = primeFactors().foldLeft(Map[Int, Int]())((r, c) => r.get(c) match {
+    case Some(x) => r.updated(c, x + 1)
+    case _ => r.updated(c, 1)
+  })
+
+  /**
     * P35 (**) Determine the prime factors of a given positive integer.
     * Construct a flat list containing the prime factors in ascending order.
     * scala> 315.primeFactors
@@ -59,22 +75,6 @@ class S99Int(m: Int) {
 
     factors(2, m, List[Int]())
   }
-
-  /**
-    * P36 (**) Determine the prime factors of a given positive integer (2).
-    * Construct a list containing the prime factors and their multiplicity.
-    * scala> 315.primeFactorMultiplicity
-    * res0: List[(Int, Int)] = List((3,2), (5,1), (7,1))
-    * Alternately, use a Map for the result.
-    *
-    * scala> 315.primeFactorMultiplicity
-    * res0: Map[Int,Int] = Map(3 -> 2, 5 -> 1, 7 -> 1)
-    */
-
-  def primeFactorMultiplicity() = primeFactors().foldLeft(Map[Int, Int]())((r,c) => r.get(c) match {
-    case Some(x) => r.updated(c, x+1)
-    case _ => r.updated(c, 1)
-  } )
 
 }
 
