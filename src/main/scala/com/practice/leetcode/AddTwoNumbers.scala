@@ -30,7 +30,7 @@ object AddTwoNumbers {
       }
     }
 
-    //println(Link1.head.toString)
+    //println(Link1.current.toString)
     Link1.head
   }
 

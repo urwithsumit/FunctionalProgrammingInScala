@@ -13,7 +13,7 @@ package com.practice.functional.prgm.scala
 object P19_RotateListByNPosition extends App {
 
   /**
-   * Starts rotation from right side of ls e.e last element is put on the head of ls
+   * Starts rotation from right side of ls e.e last element is put on the current of ls
    *
    * @param n
    * @param list

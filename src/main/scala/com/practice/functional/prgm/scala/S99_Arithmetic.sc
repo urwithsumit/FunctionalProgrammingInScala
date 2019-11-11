@@ -10,7 +10,7 @@ def gcd(m: Int, n: Int): Int = if (n == 0) m else gcd(n, m % n)
 gcd(63, 36)
 gcd(36, 63)
 
-class S99Int(m: Int) {
+class S99Int(m: Int = 1) {
   /**
     * P31 (**) Determine whether a given integer number is prime.
     * scala> 7.isPrime
@@ -76,6 +76,35 @@ class S99Int(m: Int) {
     factors(2, m, List[Int]())
   }
 
+  /**
+    * P39 (*) A list of prime numbers.
+    * Given a range of integers by its lower and upper limit, construct a list of all prime numbers in that range.
+    * scala> listPrimesinRange(7 to 31)
+    * res0: List[Int] = List(7, 11, 13, 17, 19, 23, 29, 31)
+    */
+
+  def listPrimeRange(R: Range): List[Int] = {
+   val primes =  for {i <- 1 to R.last} yield {
+      if(new S99Int(i).isPrime) i else -1
+    }
+
+    primes.filter(_ >= R.head).toList
+
+  }
+
+
+  /**
+    * P40 (**) Goldbach's conjecture.
+    * Goldbach's conjecture says that every positive even number greater than 2 is the sum of two prime numbers. E.g. 28 = 5 + 23. It is one of the most famous facts in number theory that has not been proved to be correct in the general case. It has been numerically confirmed up to very large numbers (much larger than Scala's Int can represent). Write a function to find the two prime numbers that sum up to a given even integer.
+    * scala> 28.goldbach
+    * res0: (Int, Int) = (5,23)
+    */
+
+  def goldbach(): (Int, Int) = {
+    val list = listPrimeRange(1 to m)
+
+  }
+
 }
 
 
@@ -92,3 +121,7 @@ new S99Int(35).isCoprime(64)
 new S99Int(10).totient
 new S99Int(315).primeFactors()
 new S99Int(315).primeFactorMultiplicity()
+
+new S99Int().listPrimeRange(7 to 31)
+
+
