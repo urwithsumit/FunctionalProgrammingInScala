@@ -18,7 +18,6 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
         root = Some(Node(None, None, None, head))
         tail.foreach(insert(_))
     }
-
   }
 
   /**
@@ -52,11 +51,64 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
   /**
     * Delete a Node.
+    *
     * @param n
-    * @param current
     * @return
     */
-  def delete(n: T, current: Option[Node] = root): Boolean = ???
+  def delete(n: T): Boolean = {
+
+
+    search(n) match {
+      // Case Root is the Only Node in the Tree
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeaf && node.getParent == this) => {
+        root = None
+        true
+      }
+      // Case Node is a leaf node.
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeaf) => {
+        if (node.isLeftChild)
+          node.getParent.left = None
+        else
+          node.getParent.right = None
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasLeftNode && node.hasRightNode) => {
+
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasLeftNode) => {
+        node.getParent
+
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasRightNode) => {
+
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasLeftNode && node.hasRightNode) => {
+
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasLeftNode) => {
+        node.getParent
+
+
+        true
+      }
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasRightNode) => {
+
+
+        true
+      }
+      case _ => false
+    }
+
+  }
 
   /**
     * Search an Element in a given Binary Search Tree
@@ -168,6 +220,7 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
   /**
     * Find the True successor for a Node.
     * Minimum element in the Right sub-tree.
+    *
     * @param current
     * @return
     */
@@ -175,22 +228,23 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     current match {
       case Some(node) if node.hasRightNode => treeMin(node.right)
       case Some(node) if !node.hasRightNode => Some(node)
-      // TODO : Algorithm, as explained in Corman, is not implemented fully.
+      // TODO : Algorithm, as explained in Cormen, is not implemented fully.
       // TODO Scenario, when the Right child does not exist, is pending
     }
   }
 
   /**
-   * Find the True Predecessor for a node. Symmetric to tree Successor algorithm.
-   * Maximum element in the left sub-tree.
-   * @param current
-   * @return
-   */
+    * Find the True Predecessor for a node. Symmetric to tree Successor algorithm.
+    * Maximum element in the left sub-tree.
+    *
+    * @param current
+    * @return
+    */
   def treePredecessor(current: Option[Node] = root): Option[Node] = {
     current match {
       case Some(node) if node.hasLeftNode => treeMax(node.left)
       case Some(node) if !node.hasLeftNode => Some(node)
-      // TODO : Algorithm, as explained in Corman, is not implemented fully.
+      // TODO : Algorithm, as explained in Cormen, is not implemented fully.
       // TODO Scenario, when the Right child does not exist, is pending
     }
   }
@@ -201,19 +255,32 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
       s"""
          |Node[
          |  Value = ${value},
-         |  Parent = ${if (isParent) parent.get.value else None},
+         |  Parent = ${if (hasParentNode) parent.get.value else None},
          |  Left = ${if (hasLeftNode) left.get.value else None},
          |  Right = ${if (hasRightNode) right.get.value else None}
          |]
        """.stripMargin
 
-    def isParent = parent.isDefined
-
-    def isLeaf = !hasLeftNode && !hasRightNode
+    def hasParentNode = parent.isDefined
 
     def hasLeftNode = left.isDefined
 
     def hasRightNode = right.isDefined
+
+    def isRightChild = !isLeftChild
+
+    def isLeftChild = parent match {
+      case Some(node) if (ord.lt(value, node.value)) => true
+      case _ => false
+    }
+
+    def isLeaf = !hasLeftNode && !hasRightNode
+
+    def getParent: Node = parent match {
+      case Some(node) => node
+      case _ => this // Root is the parent of itself
+    }
+
   }
 
 }
