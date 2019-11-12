@@ -167,13 +167,31 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
   /**
     * Find the True successor for a Node.
+    * Minimum element in the Right sub-tree.
     * @param current
     * @return
     */
   def treeSuccessor(current: Option[Node] = root): Option[Node] = {
     current match {
       case Some(node) if node.hasRightNode => treeMin(node.right)
-      case Some(node) => node.parent
+      case Some(node) if !node.hasRightNode => Some(node)
+      // TODO : Algorithm, as explained in Corman, is not implemented fully.
+      // TODO Scenario, when the Right child does not exist, is pending
+    }
+  }
+
+  /**
+   * Find the True Predecessor for a node. Symmetric to tree Successor algorithm.
+   * Maximum element in the left sub-tree.
+   * @param current
+   * @return
+   */
+  def treePredecessor(current: Option[Node] = root): Option[Node] = {
+    current match {
+      case Some(node) if node.hasLeftNode => treeMax(node.left)
+      case Some(node) if !node.hasLeftNode => Some(node)
+      // TODO : Algorithm, as explained in Corman, is not implemented fully.
+      // TODO Scenario, when the Right child does not exist, is pending
     }
   }
 

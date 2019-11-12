@@ -30,5 +30,8 @@ object BSTMain extends App {
 
   println(s"${BST.treeSuccessor().toString}")
 
+  println(s"${BST.treePredecessor().toString}")
+
+
 
 }
