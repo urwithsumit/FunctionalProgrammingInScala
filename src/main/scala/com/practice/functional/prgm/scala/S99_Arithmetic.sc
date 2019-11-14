@@ -84,7 +84,7 @@ class S99Int(m: Int = 1) {
     */
 
   def listPrimeRange(R: Range): List[Int] = {
-   val primes =  for {i <- 1 to R.last} yield {
+   val primes =  for {i <- R.head to R.last} yield {
       if(new S99Int(i).isPrime) i else -1
     }
 
@@ -101,11 +101,54 @@ class S99Int(m: Int = 1) {
     */
 
   def goldbach(): (Int, Int) = {
-    val list = listPrimeRange(1 to m)
+    val list = listPrimeRange(2 to m)
+    val x = list.foldLeft(0: Int)((r, c: Int) =>
+      if (list.contains(m - c)) {
+        c
+      } else r
+    )
 
+    (x, m - x)
+  }
+
+
+  /**
+    * P41 (**) A list of Goldbach compositions.
+    * Given a range of integers by its lower and upper limit, print a list of all even numbers and their Goldbach composition.
+    * scala> printGoldbachList(9 to 20)
+    * 10 = 3 + 7
+    * 12 = 5 + 7
+    * 14 = 3 + 11
+    * 16 = 3 + 13
+    * 18 = 5 + 13
+    * 20 = 3 + 17
+    */
+
+  def printGoldbachList(r: Range) = {
+    r.withFilter(_ % 2 == 0).map(x => new S99Int(x).goldbach())
+  }
+
+
+  /**
+    * In most cases, if an even number is written as the sum of two prime numbers, one of them is very small. Very rarely, the primes are both bigger than, say, 50. Try to find out how many such cases there are in the range 2..3000.
+    *
+    * Example (minimum value of 50 for the primes):
+    *
+    * scala> printGoldbachListLimited(1 to 2000, 50)
+    * 992 = 73 + 919
+    * 1382 = 61 + 1321
+    * 1856 = 67 + 1789
+    * 1928 = 61 + 1867
+    *
+    * @param r
+    * @param limit
+    */
+  def printGoldbachListLimited(r: Range, limit: Int) = {
+    printGoldbachList(r).withFilter(x => x._1 > limit && x._2 > limit).map(x => x)
   }
 
 }
+
 
 
 new S99Int(1).isPrime
@@ -124,4 +167,8 @@ new S99Int(315).primeFactorMultiplicity()
 
 new S99Int().listPrimeRange(7 to 31)
 
+new S99Int(28).goldbach
 
+new S99Int().printGoldbachList(9 to 20).foreach(c => println(s"${c._1 + c._2} = ${c._1} + ${c._2}"))
+
+new S99Int().printGoldbachListLimited(1 to 2000, 50).foreach(c => println(s"${c._1 + c._2} = ${c._1} + ${c._2}"))
