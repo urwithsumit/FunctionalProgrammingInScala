@@ -1,11 +1,13 @@
 package com.practice.datastructures
 
+sealed abstract class Tree[+T]
+
 /**
- * Binary Tree operations.
- *
- * @param ord
- * @tparam T
- */
+  * Binary Tree operations.
+  *
+  * @param ord
+  * @tparam T
+  */
 class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
   private final var root: Option[Node] = None
@@ -23,6 +25,10 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
         root = Some(Node(None, None, None, head))
         tail.foreach(insert(_))
     }
+  }
+
+  def printTree = {
+    println(root.getOrElse(None).toString)
   }
 
   /**
@@ -144,7 +150,7 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     current match {
       case Some(node) => {
         inOrder(node.left)
-        print(node.value + " ")
+        print(node.toString + " ")
         inOrder(node.right)
       }
       case _ =>
@@ -232,7 +238,7 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
   def treeSuccessor(current: Option[Node] = root): Option[Node] = {
     current match {
       case Some(node) if node.hasRightNode => treeMin(node.right)
-      case Some(node) if !node.hasRightNode => Some(node)
+      case _ => current
       // TODO : Algorithm, as explained in Cormen, is not implemented fully.
       // TODO Scenario, when the Right child does not exist, is pending
     }
@@ -248,29 +254,41 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
   def treePredecessor(current: Option[Node] = root): Option[Node] = {
     current match {
       case Some(node) if node.hasLeftNode => treeMax(node.left)
-      case Some(node) if !node.hasLeftNode => Some(node)
+      case _ => current
       // TODO : Algorithm, as explained in Cormen, is not implemented fully.
       // TODO Scenario, when the Right child does not exist, is pending
     }
   }
 
+  /**
+    * Count the Number of Leaf in a Tree.
+    *
+    * @return
+    */
+  def countLeaf: Option[Int] = {
+    val Q = scala.collection.mutable.Queue(root)
+    var r = 0
+    while (!Q.isEmpty) {
+      Q.dequeue() match {
+        case Some(x) if (x.isLeaf) => r += 1
+        case Some(x) if (x.hasLeftNode && x.hasRightNode) => Q.enqueue(x.left, x.right);
+        case Some(x) if (x.hasLeftNode) => Q.enqueue(x.left);
+        case Some(x) if (x.hasRightNode) => Q.enqueue(x.right);
+        case _ =>
+      }
+    }
 
-  case class Node(var left: Option[Node], var right: Option[Node], var parent: Option[Node], value: T) {
+    Some(r)
+  }
+
+
+  case class Node(var left: Option[Node], var right: Option[Node], var parent: Option[Node], value: T) extends Tree[T] {
     override def toString: String =
       s"""
-         |Node[
-         |  Value = ${value},
-         |  Parent = ${if (hasParentNode) parent.get.value else None},
-         |  Left = ${if (hasLeftNode) left.get.value else None},
-         |  Right = ${if (hasRightNode) right.get.value else None}
-         |]
+         |Node [Value = ${value}, Left = ${if (hasLeftNode) left.get.value.toString else None}, Right = ${if (hasRightNode) right.get.value.toString else None}, Parent = ${if (hasParentNode) parent.get.value.toString else None}]
        """.stripMargin
 
     def hasParentNode = parent.isDefined
-
-    def hasLeftNode = left.isDefined
-
-    def hasRightNode = right.isDefined
 
     def isRightChild = !isLeftChild
 
@@ -281,6 +299,10 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     def isLeaf = !hasLeftNode && !hasRightNode
 
+    def hasLeftNode = left.isDefined
+
+    def hasRightNode = right.isDefined
+
     def getParent: Node = parent match {
       case Some(node) => node
       case _ => this // Root is the parent of itself
@@ -289,3 +311,56 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
   }
 
 }
+
+object BinarySearchTree extends App {
+
+  implicit def printNode[T](v: Option[T]) = v match {
+    case Some(x) => print(x.toString)
+    case _ => print("None")
+  }
+
+  val BST = new BinarySearchTree[Int]()
+
+  BST.buildBST(List(6, 3, 4, 5, 9, 1))
+
+  println("Print Tree Root: ")
+  BST.printTree
+  println("\n")
+
+  println(s"In Order Traversal: ")
+  BST.inOrder()
+  println("\n")
+
+  println(s"Pre Order Traversal: ")
+  BST.preOrder()
+  println("\n")
+
+  println(s"Post Order Traversal")
+  BST.postOrder()
+  println("\n")
+
+  println(s"Search Key: 6")
+  printNode(BST.search(6))
+  println("\n")
+
+  println(s"Tree Max Node: ")
+  printNode(BST.treeMax())
+  println("\n")
+
+  println(s"Tree Min Node: ")
+  printNode(BST.treeMin())
+  println("\n")
+
+  println(s"Tree Successor Node: ")
+  printNode(BST.treeSuccessor())
+  println("\n")
+
+  println(s"Tree Predecessor Node: ")
+  printNode(BST.treePredecessor())
+  println("\n")
+
+  println(s"Leaf Count in Tree: ")
+  printNode(BST.countLeaf)
+
+}
+
