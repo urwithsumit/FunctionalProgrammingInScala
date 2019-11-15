@@ -1,6 +1,11 @@
 package com.practice.datastructures
 
-
+/**
+ * Binary Tree operations.
+ *
+ * @param ord
+ * @tparam T
+ */
 class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
   private final var root: Option[Node] = None

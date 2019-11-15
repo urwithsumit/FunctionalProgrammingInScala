@@ -21,6 +21,11 @@ object S99LogicalOp {
     case true => false
     case _ => true
   }
+
+  def table2(f:(Boolean, Boolean) => Boolean ) = {
+    val TT = List(true, false)
+    TT map(x => TT map (y => println(s"${x}  ${y} = ${f(x, y)}")))
+  }
 }
 
 class S99LogicalOp(a: Boolean) {
@@ -46,8 +51,10 @@ class S99LogicalOp(a: Boolean) {
   }
 }
 
-class Test extends App {
+object S99LogicalOpTest extends App {
 
+  import S99LogicalOp._
+  S99LogicalOp.table2((a: Boolean, b: Boolean) => a and (a or not(b)))
 
 }
 
