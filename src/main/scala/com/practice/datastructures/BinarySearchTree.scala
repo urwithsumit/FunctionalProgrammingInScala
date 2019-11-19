@@ -63,11 +63,20 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
   /**
     * Delete a Node.
     *
+    * @Cormen
     * @param n
     * @return
     */
   def delete(n: T): Boolean = {
 
+    def transplant(node: Node, successor: Option[Node]) = {
+      if (!node.hasParentNode) root = successor
+      else if (node.isLeftChild) node.getParent.left = successor
+      else node.getParent.right = successor
+
+      if (successor.isDefined) successor.get.parent = node.parent
+
+    }
 
     search(n) match {
       // Case Root is the Only Node in the Tree
@@ -75,7 +84,8 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
         root = None
         true
       }
-      // Case Node is a leaf node.
+      // Case Node is a leaf node: In this case there is no child dependency to manage, hence simply check if the value is less than parent,
+      // than assign the Left Child of Parent to None else assign the right child of parent to None.
       case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeaf) => {
         if (node.isLeftChild)
           node.getParent.left = None
@@ -84,38 +94,30 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
         true
       }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasLeftNode && node.hasRightNode) => {
+      // If node has Only Right child, then Right child is the successor.
+      case Some(node) if (ord.compare(node.value, n) == 0) && node.hasRightNode && !node.hasLeftNode => {
+        transplant(node, node.right)
+        true
+      }
+      // If node has Only Left child, then Left child is the successor.
+      case Some(node) if (ord.compare(node.value, n) == 0) && !node.hasRightNode && node.hasLeftNode => {
+        transplant(node, node.left)
+        true
+      }
+      // Node has a Left Node and a Right Node.
+      case Some(node) if (ord.compare(node.value, n) == 0 && node.hasLeftNode && node.hasRightNode) => {
+        val successor = treeMax(node.right) match {
+          // If Successor is the Right Child of node, than transplant.
+          case Some(successor) if successor.parent.get eq node => transplant(node, Some(successor))
+            true
+
+          case Some(successor) => // TODO
+        }
 
 
         true
       }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasLeftNode) => {
-        node.getParent
 
-
-        true
-      }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeftChild && node.hasRightNode) => {
-
-
-        true
-      }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasLeftNode && node.hasRightNode) => {
-
-
-        true
-      }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasLeftNode) => {
-        node.getParent
-
-
-        true
-      }
-      case Some(node) if (ord.compare(node.value, n) == 0 && node.isRightChild && node.hasRightNode) => {
-
-
-        true
-      }
       case _ => false
     }
 
@@ -290,18 +292,20 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     def hasParentNode = parent.isDefined
 
+    def isLeaf = !hasLeftNode && !hasRightNode
+
+    def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
+
+    def hasLeftNode = left.isDefined
+
+    def hasRightNode = right.isDefined
+
     def isRightChild = !isLeftChild
 
     def isLeftChild = parent match {
       case Some(node) if (ord.lt(value, node.value)) => true
       case _ => false
     }
-
-    def isLeaf = !hasLeftNode && !hasRightNode
-
-    def hasLeftNode = left.isDefined
-
-    def hasRightNode = right.isDefined
 
     def getParent: Node = parent match {
       case Some(node) => node
