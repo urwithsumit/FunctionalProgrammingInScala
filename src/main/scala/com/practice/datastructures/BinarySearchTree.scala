@@ -423,7 +423,8 @@ object BinarySearchTree extends App {
   BST.delete(3)
   BST.delete(10)
   BST.delete(7)
-  BST.delete(0)
+  BST.delete(6)
+  BST.delete(13)
 
 
 }
