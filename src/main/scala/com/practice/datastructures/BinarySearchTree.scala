@@ -79,18 +79,6 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
       else node.getParent.right = successor
 
       if (successor.isDefined) successor.get.parent = node.parent
-
-
-    }
-
-    // Update parent node reference in Child node.
-    def updateParent(parent: Node, child: Option[Node]) = {
-
-      child match {
-        case Some(c) => c.parent = Some(parent)
-        case _ =>
-      }
-
     }
 
     search(n) match {
@@ -117,29 +105,40 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
       // Node has a Left Node and a Right Node.
       case Some(node) if (ord.compare(node.value, n) == 0 && node.hasLeftNode && node.hasRightNode) => {
 
-        // Take the minimum node of the Right subtree
+        // Take the minimum node of the Right subtree.
         treeMin(node.right) match {
-          // If Successor is the Right Child of node, than transplant.
+          // If Successor is the immediate Right Child of node, than transplant.
           case Some(successor) if successor.parent.get eq node =>
+            // Since Successor is immediate Right node, So transplant the Successor as is with Node.
             transplant(node, Some(successor))
-            successor.left = node.left
-            updateParent(successor, node.left)
 
-          case Some(successor) =>
-            transplant(successor, successor.right)
-            transplant(node, Some(successor))
+            // Successor left node to be updated with node's left child. Note: We do not need to update the Right child of Successor,
+            // as we have transplanted the complete right node with node.
             successor.left = node.left
+
+          // If Successor is not the Immediate Right Child of the node, the transplant happens
+          // in 2 steps:
+          case Some(successor) =>
+            // Transplant Successor's Right Child to Successor. Note: Minimum Node will have no left Child.
+            transplant(successor, successor.right)
+
+            // Successor's Right child can now be update with Node's right child.
             successor.right = node.right
 
-            updateParent(successor, node.left)
-            updateParent(successor, node.right)
+            // Now transplant node with the Successor.
+            transplant(node, Some(successor))
+
+            //Successor's Left Child Can now be updated with Node's left child.
+            successor.left = node.left
         }
+
+
       }
 
-      case _ => throw new Exception("Delete Failed")
+      case None => throw new IllegalArgumentException(s"Delete Failure: Tree does not contain ${n}")
     }
 
-    println(s"Resulting Tree without ${n}")
+    println(s"Resulting Tree: ")
     BST.pretty()
     println("\n")
 
@@ -344,13 +343,13 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     def hasParentNode = parent.isDefined
 
-    def hasLeftNode = left.isDefined
-
-    def hasRightNode = right.isDefined
-
     def isLeaf = !hasLeftNode && !hasRightNode
 
     def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
+
+    def hasLeftNode = left.isDefined
+
+    def hasRightNode = right.isDefined
 
     def isRightChild = !isLeftChild
 
@@ -424,6 +423,7 @@ object BinarySearchTree extends App {
   BST.delete(3)
   BST.delete(10)
   BST.delete(7)
+  BST.delete(0)
 
 
 }
