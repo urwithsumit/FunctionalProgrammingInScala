@@ -1,5 +1,7 @@
 package com.practice.datastructures
 
+import com.practice.datastructures.BinarySearchTree.BST
+
 sealed abstract class Tree[+T]
 
 /**
@@ -67,8 +69,10 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     * @param n
     * @return
     */
-  def delete(n: T): Boolean = {
+  def delete(n: T) = {
+    println(s"Delete: ${n}")
 
+    // Splice a node by linking the parent and successor node.
     def transplant(node: Node, successor: Option[Node]) = {
       if (!node.hasParentNode) root = successor
       else if (node.isLeftChild) node.getParent.left = successor
@@ -76,13 +80,23 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
       if (successor.isDefined) successor.get.parent = node.parent
 
+
+    }
+
+    // Update parent node reference in Child node.
+    def updateParent(parent: Node, child: Option[Node]) = {
+
+      child match {
+        case Some(c) => c.parent = Some(parent)
+        case _ =>
+      }
+
     }
 
     search(n) match {
       // Case Root is the Only Node in the Tree
       case Some(node) if (ord.compare(node.value, n) == 0 && node.isLeaf && node.getParent == this) => {
         root = None
-        true
       }
       // Case Node is a leaf node: In this case there is no child dependency to manage, hence simply check if the value is less than parent,
       // than assign the Left Child of Parent to None else assign the right child of parent to None.
@@ -91,35 +105,43 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
           node.getParent.left = None
         else
           node.getParent.right = None
-
-        true
       }
       // If node has Only Right child, then Right child is the successor.
       case Some(node) if (ord.compare(node.value, n) == 0) && node.hasRightNode && !node.hasLeftNode => {
         transplant(node, node.right)
-        true
       }
       // If node has Only Left child, then Left child is the successor.
       case Some(node) if (ord.compare(node.value, n) == 0) && !node.hasRightNode && node.hasLeftNode => {
         transplant(node, node.left)
-        true
       }
       // Node has a Left Node and a Right Node.
       case Some(node) if (ord.compare(node.value, n) == 0 && node.hasLeftNode && node.hasRightNode) => {
-        val successor = treeMax(node.right) match {
+
+        // Take the minimum node of the Right subtree
+        treeMin(node.right) match {
           // If Successor is the Right Child of node, than transplant.
-          case Some(successor) if successor.parent.get eq node => transplant(node, Some(successor))
-            true
+          case Some(successor) if successor.parent.get eq node =>
+            transplant(node, Some(successor))
+            successor.left = node.left
+            updateParent(successor, node.left)
 
-          case Some(successor) => // TODO
+          case Some(successor) =>
+            transplant(successor, successor.right)
+            transplant(node, Some(successor))
+            successor.left = node.left
+            successor.right = node.right
+
+            updateParent(successor, node.left)
+            updateParent(successor, node.right)
         }
-
-
-        true
       }
 
-      case _ => false
+      case _ => throw new Exception("Delete Failed")
     }
+
+    println(s"Resulting Tree without ${n}")
+    BST.pretty()
+    println("\n")
 
   }
 
@@ -283,6 +305,36 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     Some(r)
   }
 
+  /**
+    * I am lazy to write this method, Hence taking it from below post
+    * https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+    *
+    * @param node
+    * @return
+    */
+  def pretty(node: Option[Node] = root) = {
+
+    def work(tree: Node, prefix: String, isTail: Boolean): String = {
+      val (line, bar) = if (isTail) ("└── ", " ") else ("├── ", "│")
+
+      val curr = s"${prefix}${line}${tree.value}"
+
+      val rights = tree.right match {
+        case None => s"${prefix}${bar}   ├── ∅"
+        case Some(r) => work(r, s"${prefix}${bar}   ", false)
+      }
+
+      val lefts = tree.left match {
+        case None => s"${prefix}${bar}   └── ∅"
+        case Some(l) => work(l, s"${prefix}${bar}   ", true)
+      }
+
+      s"${curr}\n${rights}\n${lefts}"
+
+    }
+
+    println(work(node.get, "", true))
+  }
 
   case class Node(var left: Option[Node], var right: Option[Node], var parent: Option[Node], value: T) extends Tree[T] {
     override def toString: String =
@@ -292,13 +344,13 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     def hasParentNode = parent.isDefined
 
-    def isLeaf = !hasLeftNode && !hasRightNode
-
-    def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
-
     def hasLeftNode = left.isDefined
 
     def hasRightNode = right.isDefined
+
+    def isLeaf = !hasLeftNode && !hasRightNode
+
+    def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
 
     def isRightChild = !isLeftChild
 
@@ -311,6 +363,7 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
       case Some(node) => node
       case _ => this // Root is the parent of itself
     }
+
 
   }
 
@@ -325,7 +378,7 @@ object BinarySearchTree extends App {
 
   val BST = new BinarySearchTree[Int]()
 
-  BST.buildBST(List(6, 3, 4, 5, 9, 1))
+  BST.buildBST(List(6, 3, 4, 5, 1, 7, 11, 9, 8, 10, 13))
 
   println("Print Tree Root: ")
   BST.printTree
@@ -344,27 +397,34 @@ object BinarySearchTree extends App {
   println("\n")
 
   println(s"Search Key: 6")
-  printNode(BST.search(6))
+  BST.pretty(BST.search(6))
   println("\n")
 
   println(s"Tree Max Node: ")
-  printNode(BST.treeMax())
+  BST.pretty(BST.treeMax())
   println("\n")
 
   println(s"Tree Min Node: ")
-  printNode(BST.treeMin())
+  BST.pretty(BST.treeMin())
   println("\n")
 
   println(s"Tree Successor Node: ")
-  printNode(BST.treeSuccessor())
+  BST.pretty(BST.treeSuccessor())
   println("\n")
 
   println(s"Tree Predecessor Node: ")
-  printNode(BST.treePredecessor())
+  BST.pretty(BST.treePredecessor())
   println("\n")
 
   println(s"Leaf Count in Tree: ")
   printNode(BST.countLeaf)
+  println("\n")
+
+  println(BST.pretty())
+  BST.delete(3)
+  BST.delete(10)
+  BST.delete(7)
+
 
 }
 
