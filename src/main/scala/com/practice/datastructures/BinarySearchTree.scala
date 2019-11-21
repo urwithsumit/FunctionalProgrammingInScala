@@ -379,8 +379,8 @@ object BinarySearchTree extends App {
 
   BST.buildBST(List(6, 3, 4, 5, 1, 7, 11, 9, 8, 10, 13))
 
-  println("Print Tree Root: ")
-  BST.printTree
+  println("Print Tree: ")
+  BST.pretty()
   println("\n")
 
   println(s"In Order Traversal: ")
