@@ -1,4 +1,4 @@
-package com.practice.functional.prgm.scala
+package com.scalaprogramming.functional.prgm.scala
 
 class NumOfElementInListTest extends FunSuite with BeforeAndAfterEach with BeforeAndAfterAll {
 

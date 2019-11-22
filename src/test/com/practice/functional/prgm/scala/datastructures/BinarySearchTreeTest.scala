@@ -1,4 +1,4 @@
-package com.practice.functional.prgm.scala.datastructures
+package com.scalaprogramming.functional.prgm.scala.datastructures
 
 class BinarySearchTreeTest extends FunSuite with BeforeAndAfterEach with BeforeAndAfterAll {
 
