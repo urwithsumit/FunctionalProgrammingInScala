@@ -2,6 +2,9 @@ package com.practice.datastructures
 
 import com.practice.datastructures.BinarySearchTree.BST
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 sealed abstract class Tree[+T]
 
 /**
@@ -169,7 +172,6 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     * @return
     */
   def inOrder(current: Option[Node] = root): Unit = {
-
     current match {
       case Some(node) => {
         inOrder(node.left)
@@ -178,7 +180,31 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
       }
       case _ =>
     }
+  }
 
+  /**
+    *
+    * @param current
+    */
+  def BalancedTree(current: Option[Node] = root): Unit = {
+
+    var buffer = mutable.ListBuffer[T]()
+
+    def SplitPoint(buffy: ListBuffer[T]) = if (buffy.length % 2 == 0) buffy.length / 2 else buffy.length / 2 + 1
+
+    def dfs(node: Option[Node]): Unit = {
+      node match {
+        case Some(Node(left, right, parent, value)) => {
+          dfs(left)
+          buffer = (buffer.addOne(value))
+          dfs(right)
+        }
+        case _ =>
+      }
+    }
+
+    dfs(current)
+    println(buffer.mkString(", "))
   }
 
   /**
@@ -345,11 +371,11 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     def isLeaf = !hasLeftNode && !hasRightNode
 
-    def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
-
     def hasLeftNode = left.isDefined
 
     def hasRightNode = right.isDefined
+
+    def hasSibling: Boolean = if (isRightChild) getParent.hasLeftNode else getParent.hasRightNode
 
     def isRightChild = !isLeftChild
 
@@ -419,12 +445,18 @@ object BinarySearchTree extends App {
   printNode(BST.countLeaf)
   println("\n")
 
+  //BST.inOrder()
+  BST.BalancedTree()
+  //BST.inOrder()
+
+
   println(BST.pretty())
-  BST.delete(3)
-  BST.delete(10)
-  BST.delete(7)
-  BST.delete(6)
-  BST.delete(13)
+  /* BST.delete(3)
+   BST.delete(10)
+   BST.delete(7)
+   BST.delete(6)
+   BST.delete(13)
+ */
 
 
 }
