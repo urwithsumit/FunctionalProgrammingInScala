@@ -9,8 +9,9 @@
 def clean(s: String, rgx: Map[String, String] = Map(("\\s+" -> "_"))) =
   rgx.foldLeft(s)((r, c) => r.replaceAll(c._1, c._2).trim.toUpperCase)
 
-clean("PAGE -  _ _ - - _        BAG -___ - - - - _",
-  Map("-" -> " ",
-    "\\s+" -> "_",
-    "\\_+" -> "_")
-)
+List("HEAP RETENTION - AUG 31", "PAGE - BERGEN", "PAO - MID CNTY APPL DAY", "PAO - MID CNTY APPL DAY2",
+  "PAO - MOR CNTY APPL DAY", "PAO - UNION CNTY APPL DAY").map(x =>
+  println(clean(x,
+    Map("-" -> " ",
+      "\\s+" -> "_",
+      "\\_+" -> "_"))))
