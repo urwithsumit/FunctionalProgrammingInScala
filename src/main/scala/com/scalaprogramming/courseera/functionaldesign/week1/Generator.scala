@@ -28,6 +28,14 @@ sealed trait Generator[+T] {
   */
 object BaseGenerator {
 
+  /**
+    * Not an actual Generator as it always returns the value that is passed to it.
+    * It's helpful to handle the boundary values.
+    *
+    * @param x
+    * @tparam T
+    * @return
+    */
   def single[T](x: T): Generator[T] = new Generator[T] {
     override def generate: T = x
   }
@@ -88,16 +96,35 @@ object Generate {
     j <- u
   } yield (i, j)
 
+  /**
+    * Return a Generator which will select a random index value from the given array
+    *
+    * @param xs
+    * @tparam T
+    * @return
+    */
   def oneOf[T](xs: T*): Generator[T] = for (idx <- choose(0, xs.length)) yield xs(idx)
 
+  /**
+    * Select a random value from a Given Range.
+    *
+    * @param lo
+    * @param high
+    * @return
+    */
   def choose(lo: Int, high: Int): Generator[Int] = for (x <- integers) yield Math.abs(lo + x % (high - lo))
 
+  /**
+    * Returns a Random List Generator
+    *
+    * @return
+    */
   def lists: Generator[List[Int]] = for {
-    isEmpty <- booleans
+    isEmpty <- booleans // Flip a coin to decide the kind of list to generate.
     list <- if (isEmpty) emptyList else nonEmptyList
   } yield list
 
-  def emptyList = single(Nil)
+  def emptyList = single(Nil) // Single helps to return a generator of Type Nil.
 
   def nonEmptyList = for {
     head <- integers
