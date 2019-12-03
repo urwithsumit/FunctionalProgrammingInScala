@@ -1,39 +1,69 @@
 package com.scalaprogramming.courseera.functionaldesign.week1
 
 /**
+  * Objective of this Example is to show that "for" expression is not just associated with collection.
+  * 'for' internally get translated to map and flatMap.
+  * If the data structure has support for map and flatMap, it can leverage 'for' expression for simpler syntax.
   *
   * @tparam T
   */
 sealed trait Generator[+T] {
 
-  s =>
+  self =>
 
   def generate: T
 
   def map[U](f: T => U) = new Generator[U] {
-    override def generate = f(s.generate)
+    override def generate = f(self.generate)
   }
 
   def flatMap[U](f: T => Generator[U]) = new Generator[U] {
-    override def generate: U = f(s.generate).generate
+    override def generate: U = f(self.generate).generate
   }
 
 }
 
+/**
+  * Base generator: Defines generators to reuse in next examples.
+  */
 object BaseGenerator {
+
+  def single[T](x: T): Generator[T] = new Generator[T] {
+    override def generate: T = x
+  }
+
+  /**
+    * Generate a java based Random Integer value.
+    */
   val integers = new Generator[Int] {
     override def generate = {
       val rand = new java.util.Random()
       rand.nextInt()
     }
+
+    // map and flatMap methods are inherited from the Generator Trait.
   }
 
+  /**
+    * We can use 'for' expression here on Generator as it supports map and flatMap method.
+    * The below 'for' expression expands to the below expression
+    * integers map(x => x > 0)
+    */
   val booleans = for (x <- integers) yield x > 0
 
-  def test[T](g: Generator[T], numTime: Int = 100)(test: T => Boolean): Unit = {
+  /**
+    * Explained towards the end of course era lecture. It showcases a method that use random data set generations
+    * for asserting against a test condition.
+    *
+    * @param g
+    * @param numTime
+    * @param f
+    * @tparam T
+    */
+  def test[T](g: Generator[T], numTime: Int = 100)(f: T => Boolean): Unit = {
     for {i <- 0 until numTime} {
       val value = g.generate
-      assert(test(value), s"Failure for Value ${value}")
+      assert(f(value), s"Failure for Value ${value}")
     }
     println(s"Passed ${numTime} tests")
   }
@@ -43,14 +73,20 @@ object Generate {
 
   import BaseGenerator._
 
+  /**
+    * pairs return a random pair of Generator of type T and U.
+    * Again, we are able to express it in 'for' expression as the map and flatMap operations are defined on Generator Trait.
+    *
+    * @param t
+    * @param u
+    * @tparam T
+    * @tparam U
+    * @return
+    */
   def pairs[T, U](t: Generator[T], u: Generator[U]) = for {
     i <- t
     j <- u
   } yield (i, j)
-
-  def single[T](x: T): Generator[T] = new Generator[T] {
-    override def generate: T = x
-  }
 
   def oneOf[T](xs: T*): Generator[T] = for (idx <- choose(0, xs.length)) yield xs(idx)
 
