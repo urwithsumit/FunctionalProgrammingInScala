@@ -2,7 +2,7 @@ package com.scalaprogramming.fundamentals
 
 /**
  * This Example is from Scala 2.13.0 API
- * LazyList is a new datastructure to replace Streams in the new version
+ * LazyList is a new data structure to replace Streams in the new version
  */
 object LazyFibonacci extends App {
 
