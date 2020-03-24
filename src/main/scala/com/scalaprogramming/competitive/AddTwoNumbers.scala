@@ -36,52 +36,43 @@ object AddTwoNumbers {
 
   def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
 
-    def addNumber(x: ListNode, y: ListNode, Carry: Int): ListNode = {
-      (x, y) match {
+    def addDigitNode(f: (ListNode, ListNode, Int) => ListNode, node1: ListNode, node2: ListNode, resultNode: Int) = {
+      val node = new ListNode(resultNode % 10) // storing unit digit
+      node.next = f(node1, node2, resultNode / 10) // carry forward for addition
+      node
+    }
+
+    //Case 1: # of digits in node 1 and node 2 are equal
+    //node1 is  null -> 1 -> 2
+    //node 2 is  null -> 2 -> 3
+
+    // Case 2: # of digits in node 1 < node 2
+    // node 1 is  null -> 1s
+    //node 2 is null -> 1 -> 2 -> 3
+
+    // Case 3: # of digits in node 1 > node 2
+    // node 1 is null -> 1 -> 2 -> 3
+    // node 2 is null -> 1 -> 2
+    def addNumber(node1: ListNode, node2: ListNode, Carry: Int): ListNode = {
+      (node1, node2) match {
         case (null, null) => {
-          if (Carry > 0) {
-            val node = new ListNode(Carry)
-            node
-          } else null
+          if (Carry > 0) new ListNode(Carry)
+          else null
         }
 
         case (null, _) => {
-          val Z = y._x + Carry
-          if (Z > 9) {
-            val node = new ListNode(Z % 10)
-            node.next = addNumber(x, y.next, Z / 10)
-            node
-          } else {
-            val node = new ListNode(Z)
-            node.next = addNumber(x, y.next, 0)
-            node
-          }
+          val Z = node2.x + Carry
+          addDigitNode(addNumber, node1, node2.next, Z)
         }
 
         case (_, null) => {
-          val Z = x._x + Carry
-          if (Z > 9) {
-            val node = new ListNode(Z % 10)
-            node.next = addNumber(x.next, y, Z / 10)
-            node
-          } else {
-            val node = new ListNode(Z)
-            node.next = addNumber(x.next, y, 0)
-            node
-          }
+          val Z = node1.x + Carry
+          addDigitNode(addNumber, node1.next, node2, Z)
         }
 
         case (_, _) => {
-          val Z = x._x + y._x + Carry
-          if (Z > 9) {
-            val node = new ListNode(Z % 10)
-            node.next = addNumber(x.next, y.next, Z / 10)
-            node
-          } else {
-            val node = new ListNode(Z)
-            node.next = addNumber(x.next, y.next, 0)
-            node
-          }
+          val Z = node1.x + node2.x + Carry
+          addDigitNode(addNumber, node1.next, node2.next, Z)
         }
       }
     }
