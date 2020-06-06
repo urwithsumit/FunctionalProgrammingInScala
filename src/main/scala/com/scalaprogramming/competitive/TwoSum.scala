@@ -48,7 +48,8 @@ object TwoSum {
       if (value != -1 && i != value) (i, value) else (-1, -1)
     }
 
-    val Ans = (Result.distinct.map(_._1) ++ Result.distinct.map(_._2)) filterNot (_ == -1)
+
+    val Ans = (Result.map(_._1) ++ Result.map(_._2)) filter (_ > 0)
 
     Ans.toArray.distinct
 

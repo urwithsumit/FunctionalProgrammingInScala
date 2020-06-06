@@ -190,7 +190,7 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     var buffer = mutable.ListBuffer[T]()
 
-    def SplitPoint(buffy: ListBuffer[T]) = if (buffy.length % 2 == 0) buffy.length / 2 else buffy.length / 2 + 1
+    //def SplitPoint(buffy: ListBuffer[T]) = if (buffy.length % 2 == 0) buffy.length / 2 else buffy.length / 2 + 1
 
     def dfs(node: Option[Node]): Unit = {
       node match {
@@ -275,7 +275,10 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
     * @param current
     * @return
     */
-  def height(current: Option[Node] = root): Int = ???
+  def height(current: Option[Node] = root): Int = {
+    if (current.getOrElse(null) == null) 0
+    else math.max(height(current.get.left), height(current.get.right)) + 1
+  }
 
   /**
     * Find the True successor for a Node.
@@ -329,6 +332,40 @@ class BinarySearchTree[T](implicit ord: Ordering[T]) {
 
     Some(r)
   }
+
+  /**
+    * Diameter of a binary tree
+    *
+    * @param node
+    * @return
+    */
+  def diameterOfBinaryTree(node: Option[Node] = root): Int = {
+
+    def _diameter(node: Option[Node]): Int = {
+      if (node.getOrElse(null) == null || node.get.left == null && node.get.right == null) 0
+      else math.max(height(node.get.left) + height(node.get.right), math.max(_diameter(node.get.left), _diameter(node.get.right)))
+    }
+
+    _diameter(node)
+  }
+
+
+/*
+  def isValidBST(root: Option[Node] = root): Boolean = {
+
+    def _isBST[K <: T](root: Option[Node], lo: K = Int.MinValue, hi: K = Int.MaxValue): Boolean = {
+      root match {
+        case Some(node) => {
+          ord.compare(node.value, lo) > 0 && ord.compare(node.value, hi) < 0 && _isBST(node.left, lo, node.value) && _isBST(node.right, node.value, hi)
+        }
+        case None => true
+      }
+    }
+
+    _isBST(root)
+
+  }
+*/
 
   /**
     * I am lazy to write this method, Hence taking it from below post
@@ -405,6 +442,8 @@ object BinarySearchTree extends App {
 
   BST.buildBST(List(6, 3, 4, 5, 1, 7, 11, 9, 8, 10, 13))
 
+  println("Diameter =>" + BST.diameterOfBinaryTree())
+
   println("Print Tree: ")
   BST.pretty()
   println("\n")
@@ -449,6 +488,7 @@ object BinarySearchTree extends App {
   BST.BalancedTree()
   //BST.inOrder()
 
+  //println("Is a valid BST:: " + BST.isValidBST())
 
   println(BST.pretty())
   /* BST.delete(3)
